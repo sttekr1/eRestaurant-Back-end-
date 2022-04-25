@@ -1,0 +1,17 @@
+[
+    {
+        "id": "5715963c-3c93-495c-baf1-aaf31b6d861c",
+        "dishName": "Fajitas",
+        "status": "new"
+    },
+    {
+        "id": "16b1efd5-a03c-4683-b039-5ebe56a60cdb",
+        "dishName": "Chicken Rice Noodles",
+        "status": "cancelled"
+    },
+    {
+        "id": "81a8e2a7-5c4d-4203-b137-2c96d5e29fc5",
+        "dishName": "Chicken Rice Noodles",
+        "status": "done"
+    }
+]

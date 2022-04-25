@@ -1,0 +1,14 @@
+[
+    {
+        "id": "0b94a9bc-506a-4eec-973f-20023ffa56b6",
+        "username": "stefan",
+        "password": "password123",
+        "role": "admin"
+    },
+    {
+        "id": "17aae47f-c4fc-42c4-9d73-7da1d977ca02",
+        "username": "john",
+        "password": "johndoe123",
+        "role": "user"
+    }
+]
