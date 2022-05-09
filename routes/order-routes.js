@@ -10,57 +10,61 @@ const {
 
 const { orderValidator } = require("../utilities/order-validator");
 
-router.get("/:id?", validateAdminSession, (req, res) => {
+router.get("/:id?", validateAdminSession, async (req, res) => {
     const orderId = req.params.id;
-    if (orderId) {
-        ordersController
-            .fetchOrdersById(orderId)
-            .then(order => res.status(200).json(order))
-            .catch(err => res.status(400).json(err))
-    } else {
-        ordersController
-            .fetchAllOrders()
-            .then(data => res.status(200).json(data))
-            .catch(err => res.status(400).json(err))
-    };
+    try {
+        if (!orderId) {
+            const orders = await ordersController.fetchAllOrders();
+            res.send(orders);
+        } else {
+            const orders = await ordersController.fetchOrdersById(orderId);
+            res.send(orders)
+        }
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.post("/add", validateAuthenticatedSession, orderValidator, (req, res) => {
+router.post("/add", validateAuthenticatedSession, orderValidator, async (req, res) => {
     const newOrder = req.body;
-    ordersController
-        .postOrderItem(newOrder)
-        .then(response => res.status(201).json(response))
-        .catch(err => res.status(400).json(err));
+    try {
+        const orders = await ordersController.postOrderItem(newOrder);
+        res.send(orders);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.patch("/:id/:status", validateAdminSession, (req, res) => {
+router.patch("/:id/:status", validateAdminSession, async (req, res) => {
     const orderId = req.params.id;
     const updatedStatus = req.params.status;
-    ordersController
-        .patchOrderStatus(orderId, updatedStatus)
-        .then(response => res.status(200).json(response))
-        .catch(err => res.status(400).json(err));
+    try {
+        const orders = await ordersController.patchOrderStatus(orderId, updatedStatus);
+        res.send(orders);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.put("/:id/update", validateAdminSession, (req, res) => {
+router.put("/:id/update", validateAdminSession, async (req, res) => {
     const orderId = req.params.id;
     const updates = req.body;
-    if (updates) {
-        ordersController
-            .updateOrderItem(orderId, updates)
-            .then(response => res.status(200).json(response))
-            .catch(err => res.status(400).json(err));
-    } else {
-        res.status(400).json({ message: "No req body found" })
-    };
+    try {
+        const orders = await ordersController.updateOrderItem(orderId, updates);
+        res.send(orders);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.delete("/:id", validateAdminSession, (req, res) => {
+router.delete("/:id", validateAdminSession, async (req, res) => {
     const orderId = req.params.id;
-    ordersController
-        .deleteOrderItem(orderId)
-        .then(response => res.status(200).json(response))
-        .catch(err => res.status(400).json(err))
+    try {
+        const orders = await ordersController.deleteOrderItem(orderId);
+        res.send(orders);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
 module.exports = router;

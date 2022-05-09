@@ -8,7 +8,10 @@ class OrdersModel {
     getAllOrders() {
         return new Promise((resolve, reject) => {
             const ordersData = fs.readFileSync(ordersPath, { encoding: "utf-8" });
-            resolve(JSON.parse(ordersData))
+            resolve(JSON.parse(ordersData));
+            if (ordersData.length <= 0) {
+                return reject({ message: "No orders found" });
+            };
         });
     };
     getOrdersById(orderId) {

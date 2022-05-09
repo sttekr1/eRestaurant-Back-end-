@@ -8,48 +8,50 @@ const {
     validateAdminSession
 } = require("../utilities/session-validator");
 
-router.get("/:id?", validateAuthenticatedSession, (req, res) => {
+router.get("/:id?", validateAuthenticatedSession, async (req, res) => {
     const dishId = req.params.id;
-    if (dishId) {
-        dishesController
-            .fetchDishesById(dishId)
-            .then(dish => res.status(200).json(dish))
-            .catch(err => res.status(400).json(err))
-    } else {
-        dishesController
-            .fetchAllDishes()
-            .then(data => res.status(200).json(data))
-            .catch(err => res.status(400).json(err));
+    try {
+        if (dishId) {
+            const dishes = await dishesController.fetchDishesById(dishId);
+            res.send(dishes);
+        } else {
+            const noIdDish = await dishesController.fetchAllDishes();
+            res.send(noIdDish);
+        }
+    } catch (error) {
+        res.send(error);
     }
 });
 
-router.post("/add", validateAdminSession, (req, res) => {
+router.post("/add", validateAdminSession, async (req, res) => {
     const newDish = req.body;
-    dishesController
-        .postDishItem(newDish)
-        .then(response => res.status(201).json(response))
-        .catch(err => res.status(400).json(err));
+    try {
+        const dishes = await dishesController.postDishItem(newDish);
+        res.send(dishes);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.put("/:id/update", validateAdminSession, (req, res) => {
+router.put("/:id/update", validateAdminSession, async (req, res) => {
     const dishId = req.params.id;
     const updates = req.body;
-    if (updates) {
-        dishesController
-            .updateDishItem(dishId, updates)
-            .then(response => res.status(200).json(response))
-            .catch(err => res.status(400).json(err));
-    } else {
-        res.status(400).json({ message: "No req body found" })
-    };
+    try {
+        const dishes = await dishesController.updateDishItem(dishId, updates);
+        res.send(dishes);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-router.delete("/:id", validateAdminSession, (req, res) => {
+router.delete("/:id", validateAdminSession, async (req, res) => {
     const dishId = req.params.id;
-    dishesController
-        .deleteDishItem(dishId)
-        .then(response => res.status(200).json(response))
-        .catch(err => res.status(400).json(err))
+    try {
+        const dishes = await dishesController.deleteDishItem(dishId);
+        res.send(dishes);
+    } catch (error) {
+        res.send(error);
+    };
 });
 
 module.exports = router;

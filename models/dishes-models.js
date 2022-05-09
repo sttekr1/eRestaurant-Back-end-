@@ -8,7 +8,10 @@ class DishesModel {
     getAllDishes() {
         return new Promise((resolve, reject) => {
             const dishesData = fs.readFileSync(dishesPath, { encoding: "utf-8" });
-            resolve(JSON.parse(dishesData))
+            resolve(JSON.parse(dishesData));
+            if (dishesData.length <= 0) {
+                return reject({ message: "No dishes found" });
+            }
         });
     };
     getDishesById(dishId) {
